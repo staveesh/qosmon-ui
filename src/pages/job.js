@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { Container, Col, Row } from "react-bootstrap";
 import MeasurementList from "../components/MeasurementList";
 import MeasurementForm from "../components/measurements/MeasurementForm";
@@ -46,69 +46,68 @@ export default function Measurement(props) {
   ];
 
   return (
-    <BrowserRouter>
+    <div>
       <Header links={links} />
       <Container style={{ marginTop: "70px" }}>
         <Row>
           <Col md="3">
-            <MeasurementList params={params} />
+            <MeasurementList loc={props.location} params={params} />
           </Col>
           <Col md="9">
-            <Switch>
-              <Route
-                path="/job"
-                render={(type) => (
-                  <MeasurementForm
-                    {...type}
-                    jwt={props.userState.user.jwt}
-                    email={props.userState.user.email}
-                  />
-                )}
-              />
-              <Route
-                path="/job/dns_lookup"
-                render={(type) => (
-                  <MeasurementForm
-                    {...type}
-                    jwt={props.userState.user.jwt}
-                    email={props.userState.user.email}
-                  />
-                )}
-              />
-              <Route
-                path="/job/traceroute"
-                render={(type) => (
-                  <MeasurementForm
-                    {...type}
-                    jwt={props.userState.user.jwt}
-                    email={props.userState.user.email}
-                  />
-                )}
-              />
-              <Route
-                path="/job/http"
-                render={(type) => (
-                  <MeasurementForm
-                    {...type}
-                    jwt={props.userState.user.jwt}
-                    email={props.userState.user.email}
-                  />
-                )}
-              />
-              <Route
-                path="/job/tcp_speed_test"
-                render={(type) => (
-                  <MeasurementForm
-                    {...type}
-                    jwt={props.userState.user.jwt}
-                    email={props.userState.user.email}
-                  />
-                )}
-              />
-            </Switch>
+            <Route
+              exact
+              path={["/job", "/job/ping"]}
+              render={(type) => (
+                <MeasurementForm
+                  {...type}
+                  jwt={props.userState.user.jwt}
+                  email={props.userState.user.email}
+                />
+              )}
+            />
+            <Route
+              path="/job/dns_lookup"
+              render={(type) => (
+                <MeasurementForm
+                  {...type}
+                  jwt={props.userState.user.jwt}
+                  email={props.userState.user.email}
+                />
+              )}
+            />
+            <Route
+              path="/job/traceroute"
+              render={(type) => (
+                <MeasurementForm
+                  {...type}
+                  jwt={props.userState.user.jwt}
+                  email={props.userState.user.email}
+                />
+              )}
+            />
+            <Route
+              path="/job/http"
+              render={(type) => (
+                <MeasurementForm
+                  {...type}
+                  jwt={props.userState.user.jwt}
+                  email={props.userState.user.email}
+                />
+              )}
+            />
+            <Route
+              path="/job/tcp_speed_test"
+              render={(type) => (
+                <MeasurementForm
+                  {...type}
+                  jwt={props.userState.user.jwt}
+                  email={props.userState.user.email}
+                />
+              )}
+            />
           </Col>
         </Row>
       </Container>
-    </BrowserRouter>
+    </div>
   );
 }

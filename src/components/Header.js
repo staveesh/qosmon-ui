@@ -6,6 +6,9 @@ export default function Header(props) {
   return (
     <nav className="navbar navbar-expand-lg light fixed-top">
       <div className="container">
+        <Link to="/research" className="navLink nav-link">
+          Home
+        </Link>
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul className="navbar-nav ml-auto">
             {props.links.map((link, idx) => {

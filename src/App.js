@@ -88,12 +88,10 @@ function App() {
           render={(props) => <Usage {...props} userState={state} />}
         />
         <Route
-          exact
           path="/job"
           render={(props) => <Measurement {...props} userState={state} />}
         />
         <Route
-          exact
           path="/results"
           render={(props) => <Result {...props} userState={state} />}
         />
