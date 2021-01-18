@@ -5,7 +5,6 @@ import { Row, Container, Col } from "react-bootstrap";
 import Header from "../components/Header";
 
 export default function Research(props) {
-  
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(props.userState.user));
   });
@@ -26,7 +25,7 @@ export default function Research(props) {
           </Link>
         </Col>
         <Col md="4">
-          <Link to="/results/ping">
+          <Link to={{ pathname: "/results" }}>
             <img
               className="image"
               src={process.env.REACT_APP_PUBLIC_URL + "/images/results.jpg"}

@@ -7,6 +7,8 @@ import Research from "./pages/research";
 import Usage from "./pages/usage";
 import Measurement from "./pages/job";
 import Register from "./pages/signup";
+import Result from "./pages/results";
+
 import axios from "axios";
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
         })
         .catch(() => {
           console.log("Token expired");
+          window.localStorage.removeItem("user");
           setState({
             loggedInStatus: "NOT_LOGGED_IN",
             user: {},
@@ -45,7 +48,7 @@ function App() {
           history.push("/");
         });
     }
-  });
+  },[history, state.loggedInStatus]);
 
   const handleLogin = (data) => {
     setState({
@@ -88,6 +91,11 @@ function App() {
           exact
           path="/job"
           render={(props) => <Measurement {...props} userState={state} />}
+        />
+        <Route
+          exact
+          path="/results"
+          render={(props) => <Result {...props} userState={state} />}
         />
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Switch>

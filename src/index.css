@@ -1,5 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
 
+a {
+  color: black;
+}
+a:hover {
+  color: black;
+  text-decoration: none;
+}
 * {
   box-sizing: border-box;
 }

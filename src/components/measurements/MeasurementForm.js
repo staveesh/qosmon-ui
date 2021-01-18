@@ -6,7 +6,10 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 export default function MeasurementForm(props) {
-  const [type, setType] = useState(props.type);
+  const path = props.location.pathname;
+  let type = path.substring(path.indexOf("/", 2) + 1);
+  if (type.startsWith("/")) type = "ping";
+
   const [start_date, setStartDate] = useState("");
   const [start_time, setStartTime] = useState("");
   const [end_date, setEndDate] = useState("");
@@ -45,7 +48,6 @@ export default function MeasurementForm(props) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const state = JSON.parse(window.localStorage.getItem("state"));
     let payload = {
       job_description: {
         measurement_description: {
@@ -66,12 +68,12 @@ export default function MeasurementForm(props) {
         job_interval: job_interval,
       },
       request_type: "SCHEDULE_MEASUREMENT",
-      user_id: state.user.email,
+      user_id: props.email,
     };
     axios
       .post(`${process.env.REACT_APP_API_URL}/schedule`, payload, {
         headers: {
-          Authorization: "Bearer " + state.user.jwt,
+          Authorization: "Bearer " + props.jwt,
         },
       })
       .then((res) => {
@@ -121,9 +123,30 @@ export default function MeasurementForm(props) {
       />
     </Form.Group>
   );
-
+  let measurement = null;
+  switch (type) {
+    case "ping":
+      measurement = "Ping";
+      break;
+    case "dns_lookup":
+      measurement = "DNS Lookup";
+      break;
+    case "traceroute":
+      measurement = "Traceroute";
+      break;
+    case "http":
+      measurement = "HTTP Download";
+      break;
+    case "tcp_speed_test":
+      measurement = "TCP Speed Test";
+      break;
+    default:
+      break;
+  }
   return (
     <Fragment>
+      <h2>Schedule : {measurement}</h2>
+      <br/>
       <Form onSubmit={onSubmit} ref={measurementForm}>
         <Form.Row>
           <Form.Group as={Col} controlId="nodeCount">
@@ -211,7 +234,7 @@ export default function MeasurementForm(props) {
           </Form.Group>
         </Form.Row>
 
-        {props.type === "tcp_speed_test" ? TcpForm : AddressForm}
+        {type === "tcp_speed_test" ? TcpForm : AddressForm}
 
         <Button variant="primary" type="submit">
           Submit
