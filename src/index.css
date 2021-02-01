@@ -33,8 +33,8 @@ span {
 
 body,
 html,
-#root,
 .App,
+#root,
 .Home,
 .auth-wrapper {
   width: 100%;

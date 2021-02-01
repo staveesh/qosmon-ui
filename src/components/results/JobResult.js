@@ -1,46 +1,24 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
 import JobCard from "./JobCard";
-import axios from "axios";
 
-export default function JobResult(props) {
-  const [state, setState] = useState({
-    data: null,
-    type: "",
-  });
-  const path = props.location.pathname;
-  let type = path.substring(path.indexOf("/", 2) + 1);
-  if (type.startsWith("/")) type = "ping";
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/results/jobs?type=${type}`, {
-        headers: {
-          Authorization: "Bearer " + props.jwt,
-        },
-      })
-      .then((res) => {
-        setState({
-          data: res.data,
-          type: type,
-        });
-      })
-      .catch((e) => console.log(e));
-  }, [type, props.jwt]);
-
+const JobResult = (props) => {
   let main = null;
-  if (state.data === null) {
+  if (props.jobs === null || props.jobs === undefined) {
     main = "Loading...";
-  } else if (state.data.length === 0) {
+  } else if (props.jobs.length === 0) {
     main = "This job type has no scheduled jobs.";
   } else {
-    main = state.data.map((job, index) => (
-      <JobCard key={index} index={index} data={job} type={type} />
+    main = props.jobs.map((job, index) => (
+      <JobCard key={index} index={index} data={job} type={props.type} />
     ));
   }
 
   return (
     <div>
-      <h2>View Results : {type}</h2>
+      <h2>View Results : {props.type}</h2>
       {main}
     </div>
   );
-}
+};
+
+export default JobResult;

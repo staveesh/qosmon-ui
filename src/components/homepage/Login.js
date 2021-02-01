@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { loginUser } from "./../../redux/actions/authActionCreator";
+import { useHistory } from "react-router-dom";
 
-function Login(props) {
+const Login = ({ dispatchLoginAction }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("NORMAL_USER");
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
 
   const clearForm = () => {
     setEmail("");
@@ -15,36 +18,25 @@ function Login(props) {
   };
 
   const onSubmit = (e) => {
-    let roles = new Set();
-    // As every user is a normal user
-    roles.add({ role: "NORMAL_USER" });
-    roles.add({ role: userType });
-    let payload = {
-      userName: email,
-      password: password,
-      roles: Array.from(roles),
-    };
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/login`, payload)
-      .then((res) => {
-        const data = {
-          jwt: res.data.jwt,
-          email: email,
-          userType: userType,
-        };
-        props.handleSuccessfulAuth(data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          setShowError(true);
-          setErrorMessage(error.response.data.detail);
-        } else {
-          setShowError(true);
-          setErrorMessage("Server Error");
-        }
-        clearForm();
-      });
     e.preventDefault();
+    const roles =
+      userType === "NORMAL_USER"
+        ? [{ role: "NORMAL_USER" }]
+        : [{ role: "RESEARCHER" }, { role: "NORMAL_USER" }];
+    dispatchLoginAction(
+      email,
+      password,
+      Array.from(roles),
+      () => {
+        if (roles.length === 1) history.push("/usage");
+        else history.push("/research");
+      },
+      (message) => {
+        setShowError(true);
+        setErrorMessage(message);
+        clearForm();
+      }
+    );
   };
 
   return (
@@ -99,6 +91,9 @@ function Login(props) {
       </div>
     </div>
   );
-}
-
-export default Login;
+};
+const mapDispatchToProps = (dispatch) => ({
+  dispatchLoginAction: (userName, password, roles, onSuccess, onError) =>
+    dispatch(loginUser({ userName, password, roles }, onSuccess, onError)),
+});
+export default connect(null, mapDispatchToProps)(Login);

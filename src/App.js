@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import Home from "./pages/login";
 import Logout from "./pages/logout";
 import Research from "./pages/research";
@@ -8,97 +9,43 @@ import Usage from "./pages/usage";
 import Measurement from "./pages/job";
 import Register from "./pages/signup";
 import Result from "./pages/results";
+import { logoutUser } from "./redux/actions/authActionCreator";
+import Header from "./components/Header";
 
-import axios from "axios";
-
-function App() {
-  const [state, setState] = useState({
-    loggedInStatus: JSON.parse(window.localStorage.getItem("user"))
-      ? "LOGGED_IN"
-      : "NOT_LOGGED_IN",
-    user: JSON.parse(window.localStorage.getItem("user")) || {},
-  });
-  const history = useHistory();
-
-  useEffect(() => {
-    const user = JSON.parse(window.localStorage.getItem("user"));
-    if (user && JSON.stringify(user) !== "{}") {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}/logged_in`, {
-          headers: {
-            Authorization: "Bearer " + user.jwt,
-          },
-        })
-        .then(() => {
-          if (state.loggedInStatus === "NOT_LOGGED_IN") {
-            console.log("User is not logged in");
-            setState({
-              loggedInStatus: "LOGGED_IN",
-              user: user,
-            });
-          }
-        })
-        .catch(() => {
-          console.log("Token expired");
-          window.localStorage.removeItem("user");
-          setState({
-            loggedInStatus: "NOT_LOGGED_IN",
-            user: {},
-          });
-          history.push("/");
-        });
-    }
-  },[history, state.loggedInStatus]);
-
-  const handleLogin = (data) => {
-    setState({
-      loggedInStatus: "LOGGED_IN",
-      user: data,
-    });
-  };
-
+function App({ user, dispatchLogoutAction }) {
   return (
     <div className="App">
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={(props) => (
-            <Home {...props} handleLogin={handleLogin} userState={state} />
+      <Header
+        isLoggedIn={user.isLoggedIn}
+        userName={user.email}
+        onLogout={dispatchLogoutAction}
+      />
+      {user.isLoggedIn ? (
+        <Switch>
+          <Route exact path="/research" component={Research} />
+          <Route exact path="/usage" component={Usage} />
+          <Route path="/job" component={Measurement} />
+          <Route path="/results" component={Result} />
+          {user.roles.length === 1 ? (
+            <Redirect to="/usage" component={Usage} />
+          ) : (
+            <Redirect to="/research" component={Research} />
           )}
-        />
-        <Route
-          exact
-          path="/signup"
-          render={(props) => <Register {...props} userState={state} />}
-        />
-        <Route
-          exact
-          path="/logout"
-          render={(props) => <Logout {...props} userState={state} />}
-        />
-        <Route
-          exact
-          path="/research"
-          render={(props) => <Research {...props} userState={state} />}
-        />
-        <Route
-          exact
-          path="/usage"
-          render={(props) => <Usage {...props} userState={state} />}
-        />
-        <Route
-          path="/job"
-          render={(props) => <Measurement {...props} userState={state} />}
-        />
-        <Route
-          path="/results"
-          render={(props) => <Result {...props} userState={state} />}
-        />
-        <Route path="*" component={() => "404 NOT FOUND"} />
-      </Switch>
+        </Switch>
+      ) : (
+        <Switch>
+          <Route exact path="/login" component={Home} />
+          <Route exact path="/signup" component={Register} />
+          <Route exact path="/logout" component={Logout} />
+          <Redirect to="/login" component={Home} />
+        </Switch>
+      )}
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({ user: state.user });
+const mapDispatchToProps = (dispatch) => ({
+  dispatchLogoutAction: () => dispatch(logoutUser()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -3,19 +3,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MeasurementForm(props) {
-  const path = props.location.pathname;
-  let type = path.substring(path.indexOf("/", 2) + 1);
-  if (type.startsWith("/")) type = "ping";
-
   const [start_date, setStartDate] = useState("");
   const [start_time, setStartTime] = useState("");
   const [end_date, setEndDate] = useState("");
   const [end_time, setEndTime] = useState("");
-  const [interval_sec, setIntervalSec] = useState(1);
-  const [count, setCount] = useState(1);
+  const interval_sec = 1;
+  const count = 1;
   const [priority, setPriority] = useState(5);
   const [target, setTarget] = useState("");
   const [node_count, setNodeCount] = useState("");
@@ -24,7 +20,7 @@ export default function MeasurementForm(props) {
   const measurementForm = useRef(null);
 
   const getTimestamp = (d, t) => {
-    return d + "T" + t + ":00.000Z";
+    return `${d}T${t}:00.000Z`;
   };
 
   const getJobKey = () => {
@@ -51,7 +47,7 @@ export default function MeasurementForm(props) {
     let payload = {
       job_description: {
         measurement_description: {
-          type: type,
+          type: props.type,
           key: getJobKey(),
           start_time: getTimestamp(start_date, start_time),
           end_time: getTimestamp(end_date, end_time),
@@ -70,23 +66,16 @@ export default function MeasurementForm(props) {
       request_type: "SCHEDULE_MEASUREMENT",
       user_id: props.email,
     };
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/schedule`, payload, {
-        headers: {
-          Authorization: "Bearer " + props.jwt,
-        },
-      })
-      .then((res) => {
-        notify("Job scheduled", true);
-      })
-      .catch((error) => {
-        if (error.response) {
-          notify(error.response.data.detail, false);
-        } else {
-          notify("Server error", false);
-        }
-      });
-    measurementForm.current.reset();
+    props.onFormSubmit(
+      payload,
+      () => {
+        notify("Job Scheduled", true);
+      },
+      (message) => {
+        notify(message, false);
+      }
+    );
+    // measurementForm.current.reset();
   };
 
   const TcpForm = (
@@ -124,7 +113,7 @@ export default function MeasurementForm(props) {
     </Form.Group>
   );
   let measurement = null;
-  switch (type) {
+  switch (props.type) {
     case "ping":
       measurement = "Ping";
       break;
@@ -146,7 +135,7 @@ export default function MeasurementForm(props) {
   return (
     <Fragment>
       <h2>Schedule : {measurement}</h2>
-      <br/>
+      <br />
       <Form onSubmit={onSubmit} ref={measurementForm}>
         <Form.Row>
           <Form.Group as={Col} controlId="nodeCount">
@@ -234,7 +223,7 @@ export default function MeasurementForm(props) {
           </Form.Group>
         </Form.Row>
 
-        {type === "tcp_speed_test" ? TcpForm : AddressForm}
+        {props.type === "tcp_speed_test" ? TcpForm : AddressForm}
 
         <Button variant="primary" type="submit">
           Submit

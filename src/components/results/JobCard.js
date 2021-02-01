@@ -7,7 +7,7 @@ export default function JobCard(props) {
   return (
     <Link
       className="card"
-      to={`/results/measurements?type=${props.type}&id=${props.data.job_description.measurement_description.key}`}
+      to={`/results/measurements/${props.type}/${props.data.job_description.measurement_description.key}`}
     >
       <Row>
         <Col md="4">
@@ -17,18 +17,19 @@ export default function JobCard(props) {
       <Row>
         <Col md="4">
           <p>
-            Job key : {props.data.job_description.measurement_description.key}
+            <strong>Job key : </strong>{" "}
+            {props.data.job_description.measurement_description.key}
           </p>
         </Col>
         <Col md="4">
           <p>
-            Start time :{" "}
+            <strong>Start time : </strong>
             {props.data.job_description.measurement_description.start_time}
           </p>
         </Col>
         <Col md="4">
           <p>
-            End time :{" "}
+            <strong>End time : </strong>
             {props.data.job_description.measurement_description.end_time}
           </p>
         </Col>
@@ -36,7 +37,7 @@ export default function JobCard(props) {
       <Row>
         <Col md="4">
           <p>
-            Target :{" "}
+            <strong>Target : </strong>
             {
               props.data.job_description.measurement_description.parameters
                 .target
@@ -44,10 +45,16 @@ export default function JobCard(props) {
           </p>
         </Col>
         <Col md="4">
-          <p>Node count : {props.data.job_description.node_count}</p>
+          <p>
+            <strong> Node count : </strong>{" "}
+            {props.data.job_description.node_count}
+          </p>
         </Col>
         <Col md="4">
-          <p>Job Interval : {props.data.job_description.job_interval}</p>
+          <p>
+            <strong>Job Interval : </strong>
+            {props.data.job_description.job_interval}
+          </p>
         </Col>
       </Row>
     </Link>

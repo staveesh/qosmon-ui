@@ -4,25 +4,41 @@ import "../styles/components/MeasurementList.css";
 export default function MeasurementList(props) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {props.params.map((param, index) => {
-        const path1 = param.path.pathname;
-        const type1 = path1.substring(path1.indexOf("/", 2) + 1);
-        const path2 = props.loc.pathname;
-        const type2 = path2.substring(path2.indexOf("/", 2) + 1);
-
-        return (
-          <NavLink
-            key={type1}
-            to={param.path}
-            isActive={() =>
-              (index === 0 && type2.startsWith("/")) || type1 === type2
-            }
-            className="list-group-item list-group-item-action"
-          >
-            {param.name}
-          </NavLink>
-        );
-      })}
+      <NavLink
+        to={props.schedule ? "/job/ping" : "/results/ping"}
+        isActive={() => props.type === "ping"}
+        className="list-group-item list-group-item-action"
+      >
+        Ping
+      </NavLink>
+      <NavLink
+        to={props.schedule ? "/job/dns_lookup" : "/results/dns_lookup"}
+        isActive={() => props.type === "dns_lookup"}
+        className="list-group-item list-group-item-action"
+      >
+        DNS Lookup
+      </NavLink>
+      <NavLink
+        to={props.schedule ? "/job/traceroute" : "/results/traceroute"}
+        isActive={() => props.type === "traceroute"}
+        className="list-group-item list-group-item-action"
+      >
+        Traceroute
+      </NavLink>
+      <NavLink
+        to={props.schedule ? "/job/http" : "/results/http"}
+        isActive={() => props.type === "http"}
+        className="list-group-item list-group-item-action"
+      >
+        HTTP Download
+      </NavLink>
+      <NavLink
+        to={props.schedule ? "/job/tcp_speed_test" : "/results/tcp_speed_test"}
+        isActive={() => props.type === "tcp_speed_test"}
+        className="list-group-item list-group-item-action"
+      >
+        TCP Throughput
+      </NavLink>
     </div>
   );
 }

@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
 import "../styles/pages/usage.css";
 import NetworkUsage from "../components/usage/NetworkUsage";
 import PieChartNetUsage from "../components/usage/charts/PieChartNetUsage";
 import { Row, Col, Container } from "react-bootstrap";
-import Header from "../components/Header";
 
 export default function Usage(props) {
-  const [data, setData] = useState([
+  const data = [
     {
       name: "com.facebook.xyz",
       tx: 50,
@@ -32,17 +30,10 @@ export default function Usage(props) {
       tx: 200,
       rx: 350,
     },
-  ]);
-
-  const links = [{ to: "/logout", name: "Log Out" }];
-
-  useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(props.userState.user));
-  });
+  ];
 
   return (
     <Container>
-      <Header links={links} />
       <Row className="layout">
         <Row className="justify-content-md-center">
           <h1>App Usage</h1>

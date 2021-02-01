@@ -2,28 +2,40 @@ import { Link } from "react-router-dom";
 import React from "react";
 import "../styles/components/Header.css";
 
-export default function Header(props) {
+export default function Header({ userName, isLoggedIn, onLogout }) {
   return (
     <nav className="navbar navbar-expand-lg light fixed-top">
       <div className="container">
-        <Link to="/research" className="navLink nav-link">
+        <Link to="/" className="navLink nav-link">
           Home
         </Link>
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-          <ul className="navbar-nav ml-auto">
-            {props.links.map((link, idx) => {
-              if (link.to === "/logout") {
-                window.localStorage.removeItem("user");
-              }
-              return (
-                <li key={idx} className="nav-item">
-                  <Link to={link.to} className="navLink nav-link">
-                    {link.name}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        <div className="collapse navbar-collapse">
+          {isLoggedIn ? (
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link
+                  to="/logout"
+                  onClick={onLogout}
+                  className="navLink nav-link"
+                >
+                  Log Out
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to="/login" className="navLink nav-link">
+                  Log In
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/signup" className="navLink nav-link">
+                  Sign Up
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </nav>
