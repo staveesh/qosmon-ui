@@ -9,6 +9,8 @@ import Usage from "./pages/usage";
 import Measurement from "./pages/job";
 import Register from "./pages/signup";
 import Result from "./pages/results";
+import Nodes from "./pages/nodes";
+import AccessPoints from "./pages/accesspoints";
 import { logoutUser } from "./redux/actions/authActionCreator";
 import Header from "./components/Header";
 
@@ -26,6 +28,8 @@ function App({ user, dispatchLogoutAction }) {
           <Route exact path="/usage" component={Usage} />
           <Route path="/job" component={Measurement} />
           <Route path="/results" component={Result} />
+          <Route path="/nodes" component={Nodes} />
+          <Route path="/access-points" component={AccessPoints} />
           {user.roles.length === 1 ? (
             <Redirect to="/usage" component={Usage} />
           ) : (

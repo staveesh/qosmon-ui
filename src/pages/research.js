@@ -45,6 +45,19 @@ export default function Research() {
             </Link>
           </div>
         </Col>
+        <Col md={{ span: 4, offset: 4 }}>
+          <div className="linkContainer">
+            <Link to="/nodes">
+              <img
+                className="image"
+                src={process.env.REACT_APP_PUBLIC_URL + "/images/health.png"}
+                alt="Monitor nodes"
+              />
+              <br />
+              <span className="imgText">Monitor nodes</span>
+            </Link>
+          </div>
+        </Col>
       </Row>
     </Container>
   );
