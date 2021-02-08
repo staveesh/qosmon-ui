@@ -7,8 +7,10 @@ import {
   Tooltip,
   Legend,
   Brush,
+  ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
+import { Row, Container, Col } from "react-bootstrap";
 import moment from "moment";
 
 export default function NodeStats({ data }) {
@@ -55,35 +57,40 @@ export default function NodeStats({ data }) {
 
   if (data && data.length > 0)
     return (
-      <div style={{ textAlign: "center" }}>
-        <h3>
-          <Link to={`/access-points/${data[0].deviceId}`} style={{textDecoration: "underline"}}>{`Device ${data[0].deviceId}`}</Link>
-        </h3>
-        <LineChart
-          width={900}
-          height={400}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" tick={CustomizedAxisTick} />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} animationDuration={0} />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="battery"
-            stroke="#8884d8"
-            activeDot={{ r: 8 }}
-          />
-          <Brush tickFormatter={xAxisTickFormatter} dataKey="time" />
-        </LineChart>
-      </div>
+      <Row style={{ textAlign: "center" }}>
+        <Col>
+          <h5>
+            <Link
+              to={`/access-points/${data[0].deviceId}`}
+              style={{ textDecoration: "underline" }}
+            >{`${data[0].deviceId}`}</Link>
+          </h5>
+          <ResponsiveContainer width={"100%"} height={400}>
+            <LineChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" tick={CustomizedAxisTick} />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} animationDuration={0} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="battery"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+              <Brush tickFormatter={xAxisTickFormatter} dataKey="time" />
+            </LineChart>
+          </ResponsiveContainer>
+        </Col>
+      </Row>
     );
   return (
     <div>
