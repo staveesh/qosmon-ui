@@ -7,10 +7,9 @@ import {
   Tooltip,
   Legend,
   Brush,
-  ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
-import { Row, Container, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import moment from "moment";
 
 export default function NodeStats({ data }) {
@@ -51,23 +50,47 @@ export default function NodeStats({ data }) {
     return null;
   };
 
+  const CustomTooltip2 = ({ active, payload, label }) => {
+    const dateTip = moment(label).format("lll");
+    const formattedDate = dateTip;
+    if (payload === null || payload === undefined) return null;
+    if (active)
+      return (
+        <div className="custom-tooltip">
+          <p className="label-tooltip">{`${formattedDate}`}</p>
+          <p className="desc-tooltip">
+            <span className="value-tooltip">
+              {payload[0].name} : {payload[0].value.toLocaleString()} &#8451;
+            </span>
+          </p>
+        </div>
+      );
+    return null;
+  };
+
   const xAxisTickFormatter = (timestamp_measured) => {
     return moment(timestamp_measured).format("lll");
   };
 
   if (data && data.length > 0)
     return (
-      <Row style={{ textAlign: "center" }}>
-        <Col>
-          <h5>
-            <Link
-              to={`/access-points/${data[0].deviceId}`}
-              style={{ textDecoration: "underline" }}
-            >{`${data[0].deviceId}`}</Link>
-          </h5>
-          <ResponsiveContainer width={"100%"} height={400}>
+      <div style={{
+        margin: "10px",
+        boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
+      }}>
+        <Row className="justify-content-md-center">
+          <Link
+            to={`/access-points/${data[0].deviceId}`}
+            style={{ textDecoration: "underline" }}
+          >{`${data[0].deviceId}`}</Link>
+        </Row>
+        <Row>
+          <Col md="5">
             <LineChart
+              width={350}
+              height={250}
               data={data}
+              name="Battery %"
               margin={{
                 top: 5,
                 right: 30,
@@ -88,9 +111,36 @@ export default function NodeStats({ data }) {
               />
               <Brush tickFormatter={xAxisTickFormatter} dataKey="time" />
             </LineChart>
-          </ResponsiveContainer>
-        </Col>
-      </Row>
+          </Col>
+          <Col md="5">
+            <LineChart
+              width={350}
+              height={250}
+              data={data}
+              name="Battery %"
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" tick={CustomizedAxisTick} />
+              <YAxis />
+              <Tooltip content={<CustomTooltip2 />} animationDuration={0} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="temperature"
+                stroke="#82280a"
+                activeDot={{ r: 8 }}
+              />
+              <Brush tickFormatter={xAxisTickFormatter} dataKey="time" />
+            </LineChart>
+          </Col>
+        </Row>
+      </div>
     );
   return (
     <div>

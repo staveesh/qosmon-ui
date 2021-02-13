@@ -74,7 +74,7 @@ export default function APstats({ data }) {
   if (data && data.length > 0)
     return (
       <div style={{ textAlign: "center" }}>
-        <h3>{`AP - ${data[0].bssid}`}</h3>
+        <h3>{`${data[0].bssid}`}</h3>
         <p>{`SSID : ${data[0].ssid}`}</p>
         <p>{`IP Address : ${data[0].ipAddress}`}</p>
         <p>{`MAC Address : ${data[0].macAddress}`}</p>

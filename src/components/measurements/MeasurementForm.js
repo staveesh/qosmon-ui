@@ -1,9 +1,9 @@
 import React, { useState, useRef, Fragment } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MeasurementForm(props) {
   const [start_date, setStartDate] = useState("");
@@ -13,14 +13,16 @@ export default function MeasurementForm(props) {
   const interval_sec = 1;
   const count = 1;
   const [priority, setPriority] = useState(5);
-  const [target, setTarget] = useState("");
+  const [target, setTarget] = useState("null");
   const [node_count, setNodeCount] = useState("");
-  const [job_interval, setJobInterval] = useState("");
+  const [job_interval_hr, setJobIntervalHr] = useState("");
+  const [job_interval_min, setJobIntervalMin] = useState("");
+  const [job_interval_sec, setJobIntervalSec] = useState("");
   const [tcp_speed_test, setTcpSpeedTest] = useState("down");
   const measurementForm = useRef(null);
 
   const getTimestamp = (d, t) => {
-    return `${d}T${t}:00.000Z`;
+    return new Date(`${d}T${t}`).toISOString();
   };
 
   const getJobKey = () => {
@@ -57,11 +59,16 @@ export default function MeasurementForm(props) {
           parameters: {
             target: target,
             server: "null",
-            direction: tcp_speed_test,
+            dir_up: tcp_speed_test === "up" ? true : false,
+            isExperiment: true,
           },
         },
         node_count: node_count,
-        job_interval: job_interval,
+        job_interval: {
+          job_interval_hr: job_interval_hr,
+          job_interval_min: job_interval_min,
+          job_interval_sec: job_interval_sec,
+        },
       },
       request_type: "SCHEDULE_MEASUREMENT",
       user_id: props.email,
@@ -150,12 +157,32 @@ export default function MeasurementForm(props) {
 
           <Form.Group as={Col} controlId="jobInterval">
             <Form.Label>Job Interval </Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Job Interval"
-              onChange={(e) => setJobInterval(e.target.value)}
-              required
-            />
+            <Row>
+              <Col md="4">
+                <Form.Control
+                  type="number"
+                  placeholder="Hours"
+                  onChange={(e) => setJobIntervalHr(e.target.value)}
+                  required
+                />
+              </Col>
+              <Col md="4">
+                <Form.Control
+                  type="number"
+                  placeholder="Minutes"
+                  onChange={(e) => setJobIntervalMin(e.target.value)}
+                  required
+                />
+              </Col>
+              <Col md="4">
+                <Form.Control
+                  type="number"
+                  placeholder="Seconds"
+                  onChange={(e) => setJobIntervalSec(e.target.value)}
+                  required
+                />
+              </Col>
+            </Row>
           </Form.Group>
         </Form.Row>
 

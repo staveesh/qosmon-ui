@@ -7,6 +7,7 @@ import JobResult from "../components/results/JobResult";
 import Ping from "../components/results/Ping";
 import DNS from "../components/results/DNS";
 import HTTP from "../components/results/HTTP";
+import TCP from "../components/results/TCP";
 
 import {
   fetchAllJobs,
@@ -65,6 +66,8 @@ const Results = ({
                   return <DNS data={jobState.jobResult} />;
                 case "http":
                   return <HTTP data={jobState.jobResult} />;
+                case "tcp_speed_test":
+                  return <TCP data={jobState.jobResult} />;
                 default:
                   break;
               }

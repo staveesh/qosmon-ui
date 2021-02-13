@@ -53,7 +53,7 @@ export default function JobCard(props) {
         <Col md="4">
           <p>
             <strong>Job Interval : </strong>
-            {props.data.job_description.job_interval}
+            {`${props.data.job_description.job_interval.job_interval_hr} hr ${props.data.job_description.job_interval.job_interval_min} min ${props.data.job_description.job_interval.job_interval_sec} sec`}
           </p>
         </Col>
       </Row>

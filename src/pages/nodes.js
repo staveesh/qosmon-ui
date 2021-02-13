@@ -11,13 +11,7 @@ const Nodes = ({ nodeState, dispatchFetchNodesAction }) => {
   return (
     <Container style={{ marginTop: "70px" }}>
       <Row>
-        <Col
-          md="8"
-          style={{
-            margin: "10px",
-            boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
-          }}
-        >
+        <Col md="8">
           <Container>
             {nodeState.deviceIds.map((deviceId) => (
               <NodeStats
@@ -37,7 +31,7 @@ const Nodes = ({ nodeState, dispatchFetchNodesAction }) => {
             padding: "10px",
             boxShadow: "0px 14px 80px rgba(34, 35, 58, 0.2)",
             marginTop: "10px",
-            marginBottom: "10px"
+            marginBottom: "10px",
           }}
         >
           <h6>Active now</h6>
