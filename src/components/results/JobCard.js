@@ -2,12 +2,13 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../../styles/components/JobCard.css";
+import moment from "moment";
 
 export default function JobCard(props) {
   return (
     <Link
       className="card"
-      to={`/results/measurements/${props.type}/${props.data.job_description.measurement_description.key}`}
+      to={`/results/measurements/${props.type}/${props.data.jobDescription.measurementDescription.key}`}
     >
       <Row>
         <Col md="4">
@@ -18,19 +19,19 @@ export default function JobCard(props) {
         <Col md="4">
           <p>
             <strong>Job key : </strong>{" "}
-            {props.data.job_description.measurement_description.key}
+            {props.data.jobDescription.measurementDescription.key}
           </p>
         </Col>
         <Col md="4">
           <p>
             <strong>Start time : </strong>
-            {props.data.job_description.measurement_description.start_time}
+            {moment(props.data.jobDescription.measurementDescription.startTime).format("lll")}
           </p>
         </Col>
         <Col md="4">
           <p>
             <strong>End time : </strong>
-            {props.data.job_description.measurement_description.end_time}
+            {moment(props.data.jobDescription.measurementDescription.endTime).format("lll")}
           </p>
         </Col>
       </Row>
@@ -38,22 +39,19 @@ export default function JobCard(props) {
         <Col md="4">
           <p>
             <strong>Target : </strong>
-            {
-              props.data.job_description.measurement_description.parameters
-                .target
-            }
+            {props.data.jobDescription.measurementDescription.parameters.target}
           </p>
         </Col>
         <Col md="4">
           <p>
             <strong> Node count : </strong>{" "}
-            {props.data.job_description.node_count}
+            {props.data.jobDescription.nodeCount}
           </p>
         </Col>
         <Col md="4">
           <p>
             <strong>Job Interval : </strong>
-            {`${props.data.job_description.job_interval.job_interval_hr} hr ${props.data.job_description.job_interval.job_interval_min} min ${props.data.job_description.job_interval.job_interval_sec} sec`}
+            {`${props.data.jobDescription.jobInterval.jobIntervalHr} hr ${props.data.jobDescription.jobInterval.jobIntervalMin} min ${props.data.jobDescription.jobInterval.jobIntervalSec} sec`}
           </p>
         </Col>
       </Row>

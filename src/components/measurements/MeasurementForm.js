@@ -47,31 +47,31 @@ export default function MeasurementForm(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     let payload = {
-      job_description: {
-        measurement_description: {
+      jobDescription: {
+        measurementDescription: {
           type: props.type,
           key: getJobKey(),
-          start_time: getTimestamp(start_date, start_time),
-          end_time: getTimestamp(end_date, end_time),
+          startTime: getTimestamp(start_date, start_time),
+          endTime: getTimestamp(end_date, end_time),
           count: count,
-          interval_sec: interval_sec,
+          intervalSec: interval_sec,
           priority: priority,
           parameters: {
             target: target,
             server: "null",
-            dir_up: tcp_speed_test === "up" ? true : false,
+            dirUp: tcp_speed_test === "up" ? true : false,
             isExperiment: true,
           },
         },
-        node_count: node_count,
-        job_interval: {
-          job_interval_hr: job_interval_hr,
-          job_interval_min: job_interval_min,
-          job_interval_sec: job_interval_sec,
+        nodeCount: node_count,
+        jobInterval: {
+          jobIntervalHr: job_interval_hr,
+          jobIntervalMin: job_interval_min,
+          jobIntervalSec: job_interval_sec,
         },
       },
-      request_type: "SCHEDULE_MEASUREMENT",
-      user_id: props.email,
+      requestType: "SCHEDULE_MEASUREMENT",
+      userId: props.email,
     };
     props.onFormSubmit(
       payload,

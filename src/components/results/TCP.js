@@ -47,6 +47,14 @@ export default function TCP(props) {
             <span className="value-tooltip">
               {payload[0].name} : {payload[0].value.toLocaleString()} Kbps
             </span>
+            <br/>
+            <span className="value-tooltip">
+              {payload[1].name} : {payload[1].value.toLocaleString()} Kbps
+            </span>
+            <br/>
+            <span className="value-tooltip">
+              {payload[2].name} : {payload[2].value.toLocaleString()} Kbps
+            </span>
           </p>
         </div>
       );

@@ -42,8 +42,8 @@ const Measurement = ({ email, dispatchScheduleJobsAction, location }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchScheduleJobsAction: (job_description, onSuccess, onError) =>
-    dispatch(scheduleJob({ ...job_description }, onSuccess, onError)),
+  dispatchScheduleJobsAction: (jobDescription, onSuccess, onError) =>
+    dispatch(scheduleJob({ ...jobDescription }, onSuccess, onError)),
 });
 
 const mapStateToProps = (state) => ({
